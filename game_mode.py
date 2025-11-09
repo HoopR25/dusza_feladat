@@ -67,7 +67,7 @@ def cls():
 
 def menu():
     cls()
-    cprint("Udvozollek a Danareen-ben!\n", "blue")
+    cprint("Udvozollek a Damareen-ben!\n", "blue")
     cprint("Valassz az alabbi opciok kozul:\n", "green")
     cprint("   1: Start")
     cprint("   2: Hasznalati utasitas")
@@ -123,8 +123,10 @@ def dungeon():
         cprint("Tag(ok):".center(os.get_terminal_size().columns), "green")
         for j in range(3, len(game_kazamatak[i]) - 1):
             print(game_kazamatak[i][j].center(os.get_terminal_size().columns))
-        if game_kazamatak[i][1] == "egyszeru" or game_kazamatak[i][1] == "nagy":
+        if game_kazamatak[i][1] == "egyszeru" or game_kazamatak[i][1] == "kis":
             cprint(f"Jutalom: {game_kazamatak[i][len(game_kazamatak[i]) - 1]}".center(os.get_terminal_size().columns), "green")
+        else:
+            cprint(f"Jutalom: kartya".center(os.get_terminal_size().columns), "green")
         print("")
     print("")
     cprint("Nyomja meg az Enter-t a folytatashoz.".center(os.get_terminal_size().columns), "blue")
@@ -184,6 +186,7 @@ def game():
 
 def kazamata_chooser():
     cls()
+    cprint("Valasszon kazamatat!".center(os.get_terminal_size().columns), "blue")
     index = 1
     choice = -1
     for kaz in kazamata.kazamatak:
@@ -271,8 +274,11 @@ def pakliallito(kiv_kaz):
             printed += 1
     
     print("")
-    cprint(f"Adja meg szokozokkel elvalaszta a kivalasztott kartyak nevet sorrendben, max. {round(len(cards.gyujtemeny) / 2)}".center(os.get_terminal_size().columns), "blue")
+    
+    
+    cprint(f"Adja meg szokozokkel elvalasztva a kivalasztott kartyak nevet sorrendben, max. {round(len(cards.gyujtemeny) / 2)}".center(os.get_terminal_size().columns), "blue")
     while True:
+        egyediek = set()
         if keyboard.is_pressed("esc"):
             menu()
             break
@@ -280,6 +286,7 @@ def pakliallito(kiv_kaz):
         choice = input()
         valasztottak = choice.strip().split(" ")
         for valasztott in valasztottak:
+            egyediek.add(valasztott)
             if len(valasztottak) > round(len(cards.gyujtemeny) / 2):
                 cprint("Tul sokat adott meg!".center(os.get_terminal_size().columns), "red")
                 is_pakli_ready = False
@@ -288,6 +295,10 @@ def pakliallito(kiv_kaz):
                 cprint("Adja meg a kartyakat helyesen!".center(os.get_terminal_size().columns), "red")
                 is_pakli_ready = False
                 break
+            
+        if len(egyediek) < len(valasztottak):
+            cprint("Ne adjon meg tobb egyforma kartyat!".center(os.get_terminal_size().columns), "red")
+            is_pakli_ready = False
         if is_pakli_ready:
             break
     
@@ -306,8 +317,10 @@ def harc(kiv_kaz):
         if keyboard.is_pressed("esc"):
             menu()
         if indexk >= len(ellenfelek):
+            input()
             win_screen(kiv_kaz, True, indexj)
         if indexj >= len(cards.pakli):
+            input()
             win_screen(kiv_kaz, False, indexj)
         print(" ________________        ________________".center(os.get_terminal_size().columns))
         print(f"|{jatekh["nev"].center(16)}|      |{kazh["nev"].center(16)}|".center(os.get_terminal_size().columns))
@@ -320,8 +333,10 @@ def harc(kiv_kaz):
             kazh["eletero"] = 0
             indexk += 1
             if indexk >= len(ellenfelek):
+                input()
                 win_screen(kiv_kaz, True, indexj)
             if indexj >= len(cards.pakli):
+                input()
                 win_screen(kiv_kaz, False, indexj)
             print(f"A kazamata kijatszik egy kartyat: {ellenfelek[indexk]}")
             kazh = cards.stats(ellenfelek[indexk]).copy()
@@ -353,8 +368,10 @@ def harc(kiv_kaz):
             jatekh["eletero"] = 0
             indexj += 1
             if indexk >= len(ellenfelek):
+                input()
                 win_screen(kiv_kaz, True, indexj)
             if indexj >= len(cards.pakli):
+                input()
                 win_screen(kiv_kaz, False, indexj)
             print(f"A jatekos kijatszik egy kartyat: {cards.pakli[indexj]}")
             jatekh = cards.stats(cards.pakli[indexj]).copy()
