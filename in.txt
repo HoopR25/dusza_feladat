@@ -28,7 +28,5 @@ export jatekos;out.jatekos01.txt
 
 harc;Teszt1a Kazamata;out.harc01.txt
 
-harc;Teszt3 Kazamata;out.harc02.txt
-
 export vilag;out.vilag02.txt
 export jatekos;out.jatekos02.txt
